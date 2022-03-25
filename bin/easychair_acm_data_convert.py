@@ -65,6 +65,14 @@ class ACM_Convert():
             'Workforce - Short Paper':      'Workforce Development, Training, Diversity, and Education - Short Paper'
         }
         self.proceedingID = '12342'
+        self.section_sequence = {
+            'Workforce Development, Training, Diversity, and Education - Full Paper': '1',
+            'Applications and Software - Full Paper': '2',
+            'Systems and System Software - Full Paper': '3',
+            'Workforce Development, Training, Diversity, and Education - Short Paper': '4',
+            'Applications and Software - Short Paper': '5',
+            'Systems and System Software - Short Paper': '6'
+        }
         self.out_csv = list()
         
     def Load(self):
@@ -158,7 +166,7 @@ class ACM_Convert():
         out['last_name'] = anauthor.get('last_name','')
         out['suffix'] = anauthor.get('suffix','')
         out['author_sequence_no'] = anauthor.get('sequence_no','0')
-        if anauthor.get('contact_author').lower in ('y', 'yes'):
+        if anauthor.get('contact_author').lower() in ('y', 'yes'):
             out['contact_author'] = 'yes'
         else:
             out['contact_author'] = 'no'
@@ -169,6 +177,7 @@ class ACM_Convert():
         out['start_page'] = '1'
         out['section_title'] = apaper.get('section_title','')
         out['article_seq_no'] = apaper.get('sequence_no') or self.PAPER_SEQ.get(apaper.get('event_tracking_number'))
+        out['section_seq_no'] = self.section_sequence.get(apaper.get('section_title',''), '')
         self.out_csv.append(out)
 
     def Convert(self):
