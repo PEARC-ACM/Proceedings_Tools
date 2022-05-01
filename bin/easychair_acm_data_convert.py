@@ -62,7 +62,8 @@ class ACM_Convert():
             'Workforce - Full Paper':       'Workforce Development, Training, Diversity, and Education - Full Paper',
             'Applications - Short Paper':   'Applications and Software - Short Paper',
             'Systems - Short Paper':        'Systems and System Software - Short Paper',
-            'Workforce - Short Paper':      'Workforce Development, Training, Diversity, and Education - Short Paper'
+            'Workforce - Short Paper':      'Workforce Development, Training, Diversity, and Education - Short Paper',
+            'Posters':                      'Posters'
         }
         self.proceedingID = '12342'
         self.section_sequence = {
@@ -71,7 +72,8 @@ class ACM_Convert():
             'Systems and System Software - Full Paper': '3',
             'Workforce Development, Training, Diversity, and Education - Short Paper': '4',
             'Applications and Software - Short Paper': '5',
-            'Systems and System Software - Short Paper': '6'
+            'Systems and System Software - Short Paper': '6',
+            'Posters': '7'
         }
         self.out_csv = list()
         
@@ -83,7 +85,7 @@ class ACM_Convert():
             with open(easyrev_path, 'r') as fd:
                 dr = csv.DictReader(fd, delimiter=',', quotechar='"')
                 for row in dr:
-                    self.reviews[row['Title']] = row
+                    self.reviews[row['Title'].strip()] = row
         except ValueError as e:
             eprint('ERROR "{}" parsing EasyChair Reviews input={}'.format(e, easyrev_path))
             self.exit(1)
@@ -129,7 +131,7 @@ class ACM_Convert():
                 if c in self.filterTypes:
                     eprint('   {} = {}'.format(c, self.typeCount[c]))
 
-        self.SORT = {}        # Used for sorting papers within a section
+        self.SORT = {}        # Used for sorting papers within a section/group
         for p in self.papers:
             SORT_GROUP = p['section_title']
             if SORT_GROUP not in self.SORT:
@@ -152,7 +154,6 @@ class ACM_Convert():
                 PAPERID = GROUP[p]
                 seq += 1
                 self.PAPER_SEQ[PAPERID] = seq
-        print('foo')
         
     def Add_Author(self, apaper, anauthor):
         out = {}
